@@ -1,17 +1,17 @@
-from typing import Dict
+from typing import Dict, Callable
 
 
 class ToolRegistry:
-    """Registry for MCP tools."""
+    """Dynamic MCP tool registry."""
 
     def __init__(self):
-        self._tools: Dict[str, object] = {}
+        self._tools: Dict[str, Callable] = {}
 
-    def register(self, tool):
-        self._tools[tool.name] = tool
+    def register(self, name: str, tool: Callable):
+        self._tools[name] = tool
 
-    def get(self, name):
+    def get(self, name: str):
         return self._tools.get(name)
 
     def list_tools(self):
-        return list(self._tools.values())
+        return list(self._tools.keys())
