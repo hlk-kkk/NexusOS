@@ -19,3 +19,11 @@ class MemoryManager:
 
     def history(self):
         return self.experiences.all()
+
+    def recall(self, keyword):
+        """Simple keyword recall before vector retrieval is introduced."""
+        keyword = keyword.lower()
+        return [
+            item for item in self.history()
+            if keyword in item.task.lower()
+        ]
