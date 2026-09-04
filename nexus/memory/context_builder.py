@@ -5,17 +5,18 @@ class ContextBuilder:
         self.memory_manager = memory_manager
 
     def build(self, query=None):
-        memories = self.memory_manager.history()
+        memories = (
+            self.memory_manager.recall(query)
+            if query
+            else self.memory_manager.history()
+        )
 
-        context = []
-        for item in memories:
-            if query is None or query.lower() in item.task.lower():
-                context.append(
-                    {
-                        "task": item.task,
-                        "steps": item.steps,
-                        "result": item.result,
-                    }
-                )
-
-        return context
+        return [
+            {
+                "task": item.task,
+                "steps": item.steps,
+                "result": item.result,
+                "metadata": getattr(item, "metadata", {}),
+            }
+            for item in memories
+        ]
